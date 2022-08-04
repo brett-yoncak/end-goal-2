@@ -1,0 +1,29 @@
+<script setup>
+import { RouterView } from 'vue-router';
+</script>
+
+<template>
+  <RouterView />
+</template>
+
+<style>
+html {
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  overflow: scroll;
+}
+
+body {
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  background-color: #1F1F1F;
+  overflow: scroll;
+}
+
+#app{
+  height: 100%;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+</style>
