@@ -1,11 +1,13 @@
 <script setup>
 import { ref } from 'vue'
 import router from '@/router'
-import store from '@/store'
+import { useUserStore } from '@/store/UserStore.js'
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import CleanButton from '@/components/CleanButton.vue'
 
 const auth = getAuth();
+const userStore = useUserStore()
+
 
 let email = ref('')
 let password = ref('')
@@ -20,9 +22,8 @@ const register = () => {
 
    else
    createUserWithEmailAndPassword(auth, email.value, password.value)
-   .then((userCredential) => {
-      const user = userCredential.user;
-      store.loggedIn = !!user
+   .then(() => {
+      userStore.loginOrOut
       router.replace({name: 'new'})
    })
    .catch((error) => {
@@ -102,41 +103,41 @@ const register = () => {
 @import '@/styles/global.scss';
 
 .grid {
-   @include grid;
+  @include grid;
 }
 
 .heading {
-   @include heading;
+  @include heading;
 }
 
 .content {
-   grid-area: content;
-   width: 100%;
+  grid-area: content;
+  width: 100%;
 }
 
 .form {
-   display: flex;
-   flex-direction: column;
-   row-gap: 8px;
-   width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  width: 100%;
 }
 
 .text-container {
-   @include text-input-container;
+  @include text-input-container;
 }
 
 .bottom-bar {
-   display: flex;
-   grid-area: foot;
-   margin-top: auto;
-   padding-bottom: 20px;
+  display: flex;
+  grid-area: foot;
+  margin-top: auto;
+  padding-bottom: 20px;
 }
 
 .reminder-text {
-   color: #F3451E;
+  color: #F3451E;
 }
 
 .normal-text {
-   color: white;
+  color: white;
 }
 </style>

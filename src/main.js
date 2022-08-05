@@ -1,8 +1,10 @@
-import { createApp } from 'vue';
-import App from './App.vue';
-import router from './router';
+import { createApp } from 'vue'
+import App from './App.vue'
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import router from './router'
 import { initializeApp } from 'firebase/app'
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
     apiKey: 'AIzaSyA_c4CQHApi7_JbPulwzYSKQVauuRanPyY',
@@ -21,7 +23,36 @@ initializeApp(firebaseConfig)
 const db = getFirestore()
 export default db
 
+const pinia = createPinia()
+
+// pinia persisted state plugin, without library
+/*
+pinia.use((context) => {
+  const serializer = {
+    serialize: JSON.stringify,
+    deserialize: JSON.parser
+  }
+  //syncing store from local storage
+  const fromStorage = serializer.deserialize(window.localStorage.getItem(storeId))
+
+  if (fromStorage) {
+    context.store.$patch(fromStorage)
+  }
+
+  const storeId = context.store.$id
+
+  context.store.$subscribe((mutation, state) => {
+    window.localStorage.setItem(storeId, serializer.serialize(state))
+  })
+})
+*/
+
+pinia.use(piniaPluginPersistedstate)
 const app = createApp(App);
+
+
+
+app.use(pinia)
 
 app.use(router);
 

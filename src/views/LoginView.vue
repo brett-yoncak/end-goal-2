@@ -1,11 +1,12 @@
 <script setup>
 import { ref } from 'vue'
 import router from '@/router'
-import store from '@/store'
+import { useUserStore } from '@/store/UserStore.js'
 import { getAuth, signInWithEmailAndPassword} from 'firebase/auth'
 import CleanButton from '@/components/CleanButton.vue'
 
 const auth = getAuth();
+const userStore = useUserStore()
 
 let email = ref('')
 let password = ref('')
@@ -13,34 +14,30 @@ let password = ref('')
 const login = () => {
    signInWithEmailAndPassword(auth, email.value, password.value)
    
-   .then((userCredential) => {
-      const user = userCredential.user;
-      store.loggedIn = !!user
+   .then(() => {
+      userStore.loginOrOut()
+
       alert('Welcome!')
-      /* NEXT PR psuedo code:
-      if(db.user.endGoals.length){
-         router.replace({name: "tasks"})
-      }
-      
-      else
-      */
-      router.replace({name: 'new'})
+
+      if (userStore.numberOfEndGoals > 0) {
+         router.replace({name: 'tasks'})
+      } else router.replace({name: 'new'})
    })
    
    .catch((error) => {
       const errorCode = error.code
-      if(errorCode === 'auth/invalid-email'){
+      if (errorCode === 'auth/invalid-email') {
          alert('Please enter a valid email address.')
          email.value = ''
          password.value = ''
       }
       
-      else if(errorCode === 'auth/wrong-password'){
+      else if (errorCode === 'auth/wrong-password') {
          alert('Incorrect password. Please try again.')
          password.value = ''
       }
 
-      else if(errorCode === 'auth/user-not-found'){
+      else if (errorCode === 'auth/user-not-found') {
          alert('User not found. Enter a valid email and passowrd, or create an new account')
          email.value = ''
          password.value = ''
