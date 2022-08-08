@@ -15,9 +15,7 @@ const login = () => {
    signInWithEmailAndPassword(auth, email.value, password.value)
    
    .then(() => {
-      userStore.loginOrOut()
-
-      alert('Welcome!')
+      userStore.login()
 
       if (userStore.numberOfEndGoals > 0) {
          router.replace({name: 'tasks'})
@@ -91,7 +89,7 @@ const login = () => {
         style="text-decoration: none"
       >
         <span class="reminder-text">
-          Don't have an account?
+          Don't have an account? &nbsp; 
         </span>
          
         <span class="normal-text">

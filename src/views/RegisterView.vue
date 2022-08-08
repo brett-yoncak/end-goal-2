@@ -23,7 +23,7 @@ const register = () => {
    else
    createUserWithEmailAndPassword(auth, email.value, password.value)
    .then(() => {
-      userStore.loginOrOut
+      userStore.login()
       router.replace({name: 'new'})
    })
    .catch((error) => {
@@ -88,7 +88,7 @@ const register = () => {
         style="text-decoration: none"
       >
         <span class="reminder-text">
-          Already have an account?
+          Already have an account? &nbsp; 
         </span>
          
         <span class="normal-text">

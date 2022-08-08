@@ -23,8 +23,18 @@ export const useUserStore = defineStore('UserStore', {
   },
 
   actions: {
-    loginOrOut() {
-      this.loggedIn = !this.loggedIn
+    login() {
+      if(this.loggedIn === false){
+      alert('Welcome!')
+      this.loggedIn = true
+      } else alert('You are already logged in.')  
+    },
+
+    logout() {
+      if(this.loggedIn === true){
+        alert('Goodbye!')
+        this.loggedIn = false
+      } else alert('You are already logged out.')  
     }
   },
 
