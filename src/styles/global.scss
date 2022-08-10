@@ -3,10 +3,11 @@
     border: none;
     height: 80px;
     padding-left: 40px;
-    font-size: 23px;
+    font-size: $f1;
     background: #565656;
     border-radius: 80px;
-    width: auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 @mixin grid {
@@ -31,8 +32,21 @@
 
 @mixin heading {
     grid-area: head;
-    font-size: 23px;
+    font-size: $f1;
     font-weight: bold;
     color: white;
     letter-spacing: 1px;
 }
+
+
+//COLORS
+$green: #3AE04B;
+
+$red: #F3451E;
+
+$grey: #565656;
+
+
+//TYPOGRAPHY
+$f1: 23px;
+$f2: 16px;

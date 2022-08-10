@@ -4,6 +4,7 @@ import router from '@/router'
 import { useUserStore } from '@/store/UserStore.js'
 import { getAuth, signInWithEmailAndPassword} from 'firebase/auth'
 import CleanButton from '@/components/CleanButton.vue'
+import TextWrapper from '@/components/TextWrapper.vue'
 
 const auth = getAuth();
 const userStore = useUserStore()
@@ -12,41 +13,37 @@ let email = ref('')
 let password = ref('')
 
 const login = () => {
-   signInWithEmailAndPassword(auth, email.value, password.value)
-   
-   .then(() => {
-      userStore.login()
+  signInWithEmailAndPassword(auth, email.value, password.value).then((userCredential) => {
+    userStore.login()
+    if (userStore.endGoals.length > 0) {
+      router.replace({name: 'tasks'})
+    } else router.replace({name: 'new'})
+  })
+  .catch((error) => {
+    const errorCode = error.code
+    if (errorCode === 'auth/invalid-email') {
+      alert('Please enter a valid email address.')
+      email.value = ''
+      password.value = ''
+    }
 
-      if (userStore.numberOfEndGoals > 0) {
-         router.replace({name: 'tasks'})
-      } else router.replace({name: 'new'})
-   })
-   
-   .catch((error) => {
-      const errorCode = error.code
-      if (errorCode === 'auth/invalid-email') {
-         alert('Please enter a valid email address.')
-         email.value = ''
-         password.value = ''
-      }
-      
-      else if (errorCode === 'auth/wrong-password') {
-         alert('Incorrect password. Please try again.')
-         password.value = ''
-      }
+    else if (errorCode === 'auth/wrong-password') {
+      alert('Incorrect password. Please try again.')
+      password.value = ''
+    }
 
-      else if (errorCode === 'auth/user-not-found') {
-         alert('User not found. Enter a valid email and passowrd, or create an new account')
-         email.value = ''
-         password.value = ''
-      }
+    else if (errorCode === 'auth/user-not-found') {
+      alert('User not found. Enter a valid email and passowrd, or create an new account')
+      email.value = ''
+      password.value = ''
+    }
 
-      else {
+    else {
       console.log(error)
       email.value = ''
       password.value = ''
-      }
-   })
+    }
+  })
 }
 </script>
 
@@ -59,26 +56,23 @@ const login = () => {
     <main class="content">
       <form
         class="form"
-        @submit.prevent="login()"
+        @submit.prevent="login"
       >  
-        <input
+        <TextWrapper
           v-model="email"
-          type="text"
           placeholder="Email"
-          class="text-container"
-        >
+        />
     
-        <input 
+        <TextWrapper 
           v-model="password"
           type="password"
           placeholder="Password"
-          class="text-container"
-        >
-    
+        />
+        
         <CleanButton
           type="submit" 
-          :text="`Login`"
-          :background="`green`"
+          text="Login"
+          background="green"
         />
       </form>
     </main>
@@ -101,8 +95,6 @@ const login = () => {
 </template>
 
 <style lang="scss" scoped>
-@import '@/styles/global.scss';
-
 .grid {
    @include grid;
 }
@@ -132,10 +124,11 @@ const login = () => {
    grid-area: foot;
    margin-top: auto;
    padding-bottom: 20px;
+   font-size: $f2
 }
 
 .reminder-text {
-   color: #F3451E;
+   color: $red;
 }
 
 .normal-text {

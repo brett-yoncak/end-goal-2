@@ -1,25 +1,32 @@
 <script setup>
 import { ref } from 'vue'
+import { useUserStore } from '@/store/UserStore.js'
 import CleanButton from '@/components/CleanButton.vue'
 
-let currentEndGoal = ref('')
-let username = 'Brett'
+const userStore = useUserStore()
 
+let currentEndGoal = ''
+
+//top-bar message
+let name = userStore.name
+let date = new Date()
+let dayNumber = date.getDay()
+let dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+let dayName = dayNames[dayNumber]
 </script>
 
 <template>
   <div class="grid">
     <span class="top-bar">
-      Happy Monday, {{ username }}!
+      Happy {{ dayName }}, {{ name }}!
     </span>
+
     <header class="heading">
       <span>What is your End Goal?</span>
     </header>
 
     <main class="content">
-      <form
-        class="form"
-      >  
+      <form class="form">  
         <input
           v-model="currentEndGoal"
           type="text"
@@ -29,8 +36,8 @@ let username = 'Brett'
     
         <CleanButton
           type="submit" 
-          :text="`Let's Go!`"
-          :background="`green`"
+          text="Let's Go!"
+          background="green"
         />
       </form>
     </main>
@@ -48,8 +55,6 @@ let username = 'Brett'
 </template>
 
 <style lang="scss" scoped>
-@import '@/styles/global.scss';
-
 .grid {
    @include grid;
 }
@@ -79,10 +84,11 @@ let username = 'Brett'
    grid-area: foot;
    margin-top: auto;
    padding-bottom: 20px;
+   font-size: $f2;
 }
 
 .reminder-text {
-   color: #F3451E;
+   color: $red;
 }
 
 .normal-text {
@@ -92,5 +98,6 @@ let username = 'Brett'
 .top-bar {
    grid-area: top;
    color: white;
+   font-size: $f2;
 }
 </style>

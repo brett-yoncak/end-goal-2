@@ -1,7 +1,17 @@
+<script setup>
+import {inject} from 'vue'
+import { collection, addDoc, doc } from 'firebase/firestore'; 
+const db = inject('database')
+
+// const createTask = async (title, currentEndGoal) => {
+//   const docRef = await addDoc(collection(db, 'users').doc().collection('tasks'), { 
+//     title: title, 
+//     endGoal: currentEndGoal 
+//     })
+//   console.log('Document written with ID: ', docRef.id)
+// }
+</script>
+
 <template>
-  <p 
-    style="color: white"
-  > 
-    Placeholder "Tasks" 
-  </p>
+  <button> make a task </button>
 </template>

@@ -1,10 +1,19 @@
 import { defineStore } from 'pinia'
 
+const defaultState = {
+  loggedIn: false,
+  name: '',
+  currentEndGoal: '',
+  endGoals: [],
+  tasks: [],
+  archives: []
+}
+
 export const useUserStore = defineStore('UserStore', {
   state() {
     return {
       loggedIn: false,
-      id: '',
+      name: '',
       currentEndGoal: '',
       endGoals: [],
       tasks: [],
@@ -12,29 +21,29 @@ export const useUserStore = defineStore('UserStore', {
     }
   },
 
-  getters: {
-    isLoggedin() {
-      return this.loggedIn
-    },
-
-    numberOfEndGoals() {
-      return this.endGoals.length
-    }
-  },
+  getters: {},
 
   actions: {
-    login() {
-      if(this.loggedIn === false){
+    login(userId) {
+      if(!this.loggedIn){
       alert('Welcome!')
       this.loggedIn = true
       } else alert('You are already logged in.')  
     },
 
     logout() {
-      if(this.loggedIn === true){
+      if(this.loggedIn){
         alert('Goodbye!')
-        this.loggedIn = false
+        this.reset()
       } else alert('You are already logged out.')  
+    },
+
+    reset() {
+      Object.assign(this, defaultState)
+    },
+
+    setName(name) {
+      this.name = name
     }
   },
 

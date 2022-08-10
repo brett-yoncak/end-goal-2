@@ -45,19 +45,19 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
-  const requiresAuth = to.matched.some((x) => x.meta.requiresAuth)
-  const requiresGuest = to.matched.some((x) => x.meta.requiresGuest)
-  const isLoggedin = userStore.isLoggedin
-  const numberOfEndGoals = userStore.numberOfEndGoals
+  const requiresAuth = to.meta.requiresAuth
+  const requiresGuest = to.meta.requiresGuest
+  const loggedIn = userStore.loggedIn
+  const numberOfEndGoals = userStore.endGoals.length
 
-  if (requiresAuth && isLoggedin === false) {
+  if (requiresAuth && !loggedIn) {
     next('/login')
-  } else if (requiresAuth && isLoggedin === true) {
+  } else if (requiresAuth && loggedIn) {
     next()
-  } else if (requiresGuest && isLoggedin === true && numberOfEndGoals > 0) {
+  } else if (requiresGuest && loggedIn && numberOfEndGoals > 0) {
     alert('You are already logged in.')
     next('/tasks')
-  } else if (requiresGuest && isLoggedin === true && numberOfEndGoals === 0) {
+  } else if (requiresGuest && loggedIn && numberOfEndGoals === 0) {
     alert('You are already logged in.')
     next('/new')
   } else next()

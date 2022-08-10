@@ -9,9 +9,9 @@ module.exports = {
     'vue/multi-word-component-names': 'off',
     'vue/no-multiple-template-root': 'off',
     'vue/script-setup-uses-vars': 2,
-    'no-unused-vars': 'off',
     'vue/valid-define-emits': 2,
     'quotes': ['error', 'single'],
+    'no-unused-vars': 'off'
   },
   ignorePatterns: ['server'],
   env: {

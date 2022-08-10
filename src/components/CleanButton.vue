@@ -1,51 +1,44 @@
 <script setup>
-import { defineProps } from 'vue'
 const props = defineProps(
-   {
-      text: {
-         type: String,
-         required: true
-      },
+  {
+    text: {
+    type: String,
+    required: true
+  },
 
-      background: {
-         type: String,
-         required: true
-      }
-   }
-)
-
+  background: {
+    type: String,
+    required: true
+  }
+})
 </script>
 
 <template>
-  <button 
-    class="clean-button" 
-    :class="background"
-  >
+  <button :class="[background, 'clean-button']">
     {{ text }}
   </button>
 </template>
 
 <style lang="scss" scoped>
-
 .clean-button {
-   height: 80px;
-   width: 100%;
-   border: none;
-   border-radius: 80px;
-   font-size: 20px
+  padding: 30px;   
+  width: 100%;
+  border: none;
+  border-radius: 80px;
+  font-size: 20px
 }
 
 .green {
-   background: #3AE04B;
+  background: $green;
 }
 
 .red {
-   background: #F3451E;
-   color: white   
+  background: $red;
+  color: white   
 }
 
 .grey {
-   background: #565656;
-   color: white
+  background: $grey;
+  color: white
 }
 </style>

@@ -6,49 +6,27 @@ import router from '@/router'
 
 const auth = getAuth()
 const userStore = useUserStore()
-
 //Logout button is here for now. Needed for testing.
 // Will properly integrate in Options Page PR.
-
 const logout = () => {
-  signOut(auth)
-   
-  .then(() => {
-    userStore.logout()
-    router.replace({name: 'login'})
-  })
-  .catch((error) => {
-    console.log(error)
-  })
+  if(userStore.loggedIn) {
+    signOut(auth).then(() => {
+      userStore.logout()
+      router.replace({name: 'login'})
+    })
+    .catch((error) => {
+      alert('something went wrong')
+    })
+  } else {
+    alert('You are already logged out.')
+  }
 }
 </script>
 
 <template>
-  <button @click="logout()">
+  <button @click="logout">
     LOGOUT
   </button>
 
   <RouterView />
 </template>
-
-<style>
-html {
-  height: 100%;
-  padding: 0px;
-  margin: 0px;
-  overflow: scroll;
-}
-
-body {
-  height: 100%;
-  padding: 0px;
-  margin: 0px;
-  background-color: #1F1F1F;
-  overflow: scroll;
-}
-
-#app{
-  height: 100%;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-</style>

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { createApp } from 'vue'
 import App from './App.vue'
 import { createPinia } from 'pinia'
@@ -6,52 +7,38 @@ import router from './router'
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 
+import '@/styles/main.scss'
+
 const firebaseConfig = {
-    apiKey: 'AIzaSyA_c4CQHApi7_JbPulwzYSKQVauuRanPyY',
-    authDomain: 'end-goal-1ba81.firebaseapp.com',
-    projectId: 'end-goal-1ba81',
-    storageBucket: 'end-goal-1ba81.appspot.com',
-    messagingSenderId: '79697638429',
-    appId: '1:79697638429:web:8a962787e243fd773d82f4',
-    measurementId: 'G-ZYCLNPQD64'
+  apiKey: process.env.VUE_APP_FB_API_KEY,
+  authDomain: process.env.VUE_APP_FB_PROJECT_ID + '.firebaseapp.com',
+  projectId: process.env.VUE_APP_FB_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_FB_PROJECT_ID + '.appspot.com',
+  messagingSenderId: '79697638429',
+  appId: '1:79697638429:web:8a962787e243fd773d82f4',
+  measurementId: 'G-ZYCLNPQD64'
 }
 
 //initializing firebase 
 initializeApp(firebaseConfig)
 
-//initializing firestore
-const db = getFirestore()
-export default db
+const FirestorePlugin = {
+  install: (app, options) => {
+    const db = getFirestore()
+    app.provide('database', db) 
+  }
+};
 
 const pinia = createPinia()
 
-// pinia persisted state plugin, without library
-/*
-pinia.use((context) => {
-  const serializer = {
-    serialize: JSON.stringify,
-    deserialize: JSON.parser
-  }
-  //syncing store from local storage
-  const fromStorage = serializer.deserialize(window.localStorage.getItem(storeId))
-
-  if (fromStorage) {
-    context.store.$patch(fromStorage)
-  }
-
-  const storeId = context.store.$id
-
-  context.store.$subscribe((mutation, state) => {
-    window.localStorage.setItem(storeId, serializer.serialize(state))
-  })
-})
-*/
-
 pinia.use(piniaPluginPersistedstate)
-const app = createApp(App);
+
+const app = createApp(App)
 
 app.use(pinia)
 
-app.use(router);
+app.use(router)
 
-app.mount('#app');
+app.use(FirestorePlugin)
+
+app.mount('#app')

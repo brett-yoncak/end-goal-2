@@ -2,43 +2,49 @@
 import { ref } from 'vue'
 import router from '@/router'
 import { useUserStore } from '@/store/UserStore.js'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, updateProfile, createUserWithEmailAndPassword } from 'firebase/auth'
 import CleanButton from '@/components/CleanButton.vue'
+import TextWrapper from '@/components/TextWrapper.vue'
 
 const auth = getAuth();
 const userStore = useUserStore()
+const user = auth.currentUser
 
-
+let name = ref('')
 let email = ref('')
 let password = ref('')
 let passwordCheck = ref('')
 
 const register = () => {
-   if(password.value != passwordCheck.value){
-      alert('Passwords MUST match. Try again.')
-      password.value = '' 
-      passwordCheck.value  = ''
-   }
+  if (password.value != passwordCheck.value){
+    alert('Passwords MUST match. Try again.')
+    password.value = '' 
+    passwordCheck.value  = ''
+  }
 
-   else
-   createUserWithEmailAndPassword(auth, email.value, password.value)
-   .then(() => {
-      userStore.login()
-      router.replace({name: 'new'})
+  createUserWithEmailAndPassword(auth, email.value, password.value)
+  .then(() => {
+    userStore.login()
+    userStore.setName(name.value)
+    updateProfile(user, {
+      displayName:`${name.value}`
+    })
+    router.replace({name: 'new'})
+    console.log(user.displayName)
    })
-   .catch((error) => {
-      const errorCode = error.code
-      if(errorCode === 'auth/invalid-email'){
-         alert('Please enter a valid email address.')
-      }
-      else if(errorCode === 'auth/weak-password'){
-         alert('Your password should be at least 6 characters long.')
-      }
+  .catch((error) => {
+    const errorCode = error.code
+    if (errorCode === 'auth/invalid-email'){
+      alert('Please enter a valid email address.')
+    }
+    else if (errorCode === 'auth/weak-password'){
+      alert('Your password should be at least 6 characters long.')
+    }
       
-      email.value = ''
-      password.value = ''
-      passwordCheck.value = ''
-   })
+    email.value = ''
+    password.value = ''
+    passwordCheck.value = ''
+  })
 }
 </script>
 
@@ -51,21 +57,23 @@ const register = () => {
     <article class="content">
       <form
         class="form"
-        @submit.prevent="register()"
-      >  
-        <input
+        @submit.prevent="register"
+      >
+        <TextWrapper
+          v-model="name"
+          placeholder="First Name"
+        />
+      
+        <TextWrapper
           v-model="email"
-          type="text"
           placeholder="Email"
-          class="text-container"
-        >
+        />
     
-        <input 
+        <TextWrapper 
           v-model="password"
           type="password"
           placeholder="Password"
-          class="text-container"
-        >
+        />
 
         <input
           v-model="passwordCheck"
@@ -76,16 +84,16 @@ const register = () => {
     
         <CleanButton
           type="submit" 
-          :text="`Let's go!`"
-          :background="`green`"
+          text="Let's go!"
+          background="green"
         />
       </form>
     </article>
 
     <div class="bottom-bar">
-      <router-link 
+      <router-link
+        class="router" 
         to="/login" 
-        style="text-decoration: none"
       >
         <span class="reminder-text">
           Already have an account? &nbsp; 
@@ -100,8 +108,6 @@ const register = () => {
 </template>
 
 <style lang="scss" scoped>
-@import '@/styles/global.scss';
-
 .grid {
   @include grid;
 }
@@ -131,13 +137,18 @@ const register = () => {
   grid-area: foot;
   margin-top: auto;
   padding-bottom: 20px;
+  font-size: $f2;
 }
 
 .reminder-text {
-  color: #F3451E;
+  color: $red;
 }
 
 .normal-text {
   color: white;
+}
+
+.router {
+  text-decoration: none
 }
 </style>
