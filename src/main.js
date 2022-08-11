@@ -6,7 +6,6 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import router from './router'
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
-
 import '@/styles/main.scss'
 
 const firebaseConfig = {
