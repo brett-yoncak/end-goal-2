@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 import router from '@/router'
-import { useUserStore } from '@/store/UserStore.js'
 import { getAuth, signInWithEmailAndPassword} from 'firebase/auth'
+import { useUserStore } from '@/store/userStore.js'
+import { EventBus } from '@/event-bus.js'
 import CleanButton from '@/components/CleanButton.vue'
 import TextWrapper from '@/components/TextWrapper.vue'
 
@@ -12,34 +13,54 @@ const userStore = useUserStore()
 let email = ref('')
 let password = ref('')
 
+let alert = userStore.alert
+let alertType = ref('')
+let alertHeader = ref('')
+let alertMessage = ref('')
+
 const login = () => {
-  signInWithEmailAndPassword(auth, email.value, password.value).then((userCredential) => {
+  signInWithEmailAndPassword(auth, email.value, password.value)
+  .then(() => {
     userStore.login()
+    
     if (userStore.endGoals.length > 0) {
       router.replace({name: 'tasks'})
-    } else router.replace({name: 'new'})
+    } else {
+      router.replace({name: 'new'})
+    }
   })
   .catch((error) => {
     const errorCode = error.code
+
     if (errorCode === 'auth/invalid-email') {
-      alert('Please enter a valid email address.')
+      EventBus.emit('notify', {
+        type: 'error',
+        header: 'Invalid Email',
+        message: 'Please enter a valid email address.',
+      })
       email.value = ''
       password.value = ''
-    }
-
-    else if (errorCode === 'auth/wrong-password') {
-      alert('Incorrect password. Please try again.')
+    } else if (errorCode === 'auth/wrong-password') {
+      EventBus.emit('notify', {
+        type: 'error',
+        header: 'Incorrect Password',
+        message: 'Please try again.',
+      })
       password.value = ''
-    }
-
-    else if (errorCode === 'auth/user-not-found') {
-      alert('User not found. Enter a valid email and passowrd, or create an new account')
+    } else if (errorCode === 'auth/user-not-found') {
+      EventBus.emit('notify', {
+        type: 'error',
+        header: 'User Not Found',
+        message: 'Please enter a valid email address and password, or create a new account.',
+      })
       email.value = ''
       password.value = ''
-    }
-
-    else {
-      console.log(error)
+    } else {
+      EventBus.emit('notify', {
+        type: 'error',
+        header: 'Something went VERY wrong.',
+        message: 'Please try again.',
+      })
       email.value = ''
       password.value = ''
     }
@@ -54,10 +75,7 @@ const login = () => {
     </header>
 
     <main class="content">
-      <form
-        class="form"
-        @submit.prevent="login"
-      >  
+      <form class="form" @submit.prevent="login">  
         <TextWrapper
           v-model="email"
           placeholder="Email"
@@ -65,14 +83,14 @@ const login = () => {
     
         <TextWrapper 
           v-model="password"
-          type="password"
           placeholder="Password"
+          type="password"
         />
         
         <CleanButton
-          type="submit" 
-          text="Login"
           background="green"
+          text="Login"
+          type="submit" 
         />
       </form>
     </main>
@@ -96,42 +114,39 @@ const login = () => {
 
 <style lang="scss" scoped>
 .grid {
-   @include grid;
+  @include grid;
 }
 
 .heading {
-   @include heading
+  @include heading
 }
 
 .content {
-   grid-area: content;
-   width: 100%;
+  grid-area: content;
+  width: 100%;
 }
 
 .form {
-   display: flex;
-   flex-direction: column;
-   row-gap: 8px;
-   width: 100%;
-}
-
-.text-container {
-   @include text-input-container;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+   
+  width: 100%;
 }
 
 .bottom-bar {
-   display: flex;
-   grid-area: foot;
-   margin-top: auto;
-   padding-bottom: 20px;
-   font-size: $f2
+  display: flex;
+  grid-area: foot;
+  margin-top: auto;
+  padding-bottom: 20px;
+  font-size: $f2
 }
 
 .reminder-text {
-   color: $red;
+  color: $red;
 }
 
 .normal-text {
-   color: white;
+  color: white;
 }
 </style>

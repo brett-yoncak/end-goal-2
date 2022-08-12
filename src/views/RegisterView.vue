@@ -1,10 +1,12 @@
 <script setup>
 import { ref } from 'vue'
 import router from '@/router'
-import { useUserStore } from '@/store/UserStore.js'
+import { EventBus } from '@/event-bus.js'
 import { getAuth, updateProfile, createUserWithEmailAndPassword } from 'firebase/auth'
+import { useUserStore } from '@/store/userStore.js'
 import CleanButton from '@/components/CleanButton.vue'
 import TextWrapper from '@/components/TextWrapper.vue'
+
 
 const auth = getAuth();
 const userStore = useUserStore()
@@ -17,7 +19,11 @@ let passwordCheck = ref('')
 
 const register = () => {
   if (password.value != passwordCheck.value){
-    alert('Passwords MUST match. Try again.')
+    EventBus.emit('notify', {
+      type: 'error',
+      header: 'Passwords Must Match',
+      message: 'Passwords did not match. Please try again.',
+    })
     password.value = '' 
     passwordCheck.value  = ''
   }
@@ -26,21 +32,31 @@ const register = () => {
   .then(() => {
     userStore.login()
     userStore.setName(name.value)
+    
     updateProfile(user, {
-      displayName:`${name.value}`
+      displayName:name.value
     })
+
     router.replace({name: 'new'})
-    console.log(user.displayName)
+    console.log(user.displayName)  
    })
   .catch((error) => {
     const errorCode = error.code
+    
     if (errorCode === 'auth/invalid-email'){
-      alert('Please enter a valid email address.')
+      EventBus.emit('notify', {
+        type: 'error',
+        header: 'Invalid Email',
+        message: 'Please enter a valid email address.',
+      })
+    } else if (errorCode === 'auth/weak-password'){
+      EventBus.emit('notify', {
+        type: 'error',
+        header: 'Weak Password',
+        message: 'Your password should be at least 6 characters long.',
+      })
     }
-    else if (errorCode === 'auth/weak-password'){
-      alert('Your password should be at least 6 characters long.')
-    }
-      
+    
     email.value = ''
     password.value = ''
     passwordCheck.value = ''
@@ -55,10 +71,7 @@ const register = () => {
     </header>
 
     <article class="content">
-      <form
-        class="form"
-        @submit.prevent="register"
-      >
+      <form class="form" @submit.prevent="register">
         <TextWrapper
           v-model="name"
           placeholder="First Name"
@@ -71,30 +84,26 @@ const register = () => {
     
         <TextWrapper 
           v-model="password"
-          type="password"
           placeholder="Password"
+          type="password"
         />
 
-        <input
+        <TextWrapper 
           v-model="passwordCheck"
-          type="password"
           placeholder="Confirm Password"
-          class="text-container"
-        >
+          type="password"
+        />
     
         <CleanButton
-          type="submit" 
-          text="Let's go!"
           background="green"
+          text="Let's go!"
+          type="submit" 
         />
       </form>
     </article>
 
     <div class="bottom-bar">
-      <router-link
-        class="router" 
-        to="/login" 
-      >
+      <router-link class="router" to="/login">
         <span class="reminder-text">
           Already have an account? &nbsp; 
         </span>

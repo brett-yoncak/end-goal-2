@@ -1,18 +1,16 @@
 <script setup>
 import { ref } from 'vue'
-import { useUserStore } from '@/store/UserStore.js'
+import { useUserStore } from '@/store/userStore.js'
 import CleanButton from '@/components/CleanButton.vue'
+import getDate from '@/helper.js'
 
 const userStore = useUserStore()
 
 let currentEndGoal = ''
 
 //top-bar message
-let name = userStore.name
-let date = new Date()
-let dayNumber = date.getDay()
-let dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-let dayName = dayNames[dayNumber]
+let name = ref(userStore.name)
+let dayName = ref(getDate)
 </script>
 
 <template>
@@ -29,15 +27,15 @@ let dayName = dayNames[dayNumber]
       <form class="form">  
         <input
           v-model="currentEndGoal"
-          type="text"
-          placeholder="I will..."
           class="text-container"
+          placeholder="I will..."
+          type="text"
         >
     
         <CleanButton
-          type="submit" 
-          text="Let's Go!"
           background="green"
+          text="Let's Go!"
+          type="submit" 
         />
       </form>
     </main>

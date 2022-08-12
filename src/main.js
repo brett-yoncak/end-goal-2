@@ -13,9 +13,9 @@ const firebaseConfig = {
   authDomain: process.env.VUE_APP_FB_PROJECT_ID + '.firebaseapp.com',
   projectId: process.env.VUE_APP_FB_PROJECT_ID,
   storageBucket: process.env.VUE_APP_FB_PROJECT_ID + '.appspot.com',
-  messagingSenderId: '79697638429',
-  appId: '1:79697638429:web:8a962787e243fd773d82f4',
-  measurementId: 'G-ZYCLNPQD64'
+  messagingSenderId: process.env.VUE_APP_FB_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_FB_APP_ID,
+  measurementId: process.env.VUE_APP_FB_MEASUREMENT_ID
 }
 
 //initializing firebase 

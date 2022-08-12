@@ -1,20 +1,20 @@
 <script setup>
-const props = defineProps(
+const props = defineProps (
   {
     text: {
-    type: String,
-    required: true
-  },
+      type: String,
+      required: true
+    },
 
-  background: {
-    type: String,
-    required: true
-  }
+    background: {
+      type: String,
+      required: true
+    }
 })
 </script>
 
 <template>
-  <button :class="[background, 'clean-button']">
+  <button :class="['clean-button', background]">
     {{ text }}
   </button>
 </template>
