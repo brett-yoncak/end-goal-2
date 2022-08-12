@@ -56,7 +56,7 @@ const register = () => {
         message: 'Your password should be at least 6 characters long.',
       })
     }
-    
+
     email.value = ''
     password.value = ''
     passwordCheck.value = ''
@@ -65,7 +65,7 @@ const register = () => {
 </script>
 
 <template>
-  <div class="grid">
+  <div class="card">
     <header class="heading">
       <span>Create your account to get started! 💪</span>
     </header>
@@ -117,38 +117,6 @@ const register = () => {
 </template>
 
 <style lang="scss" scoped>
-.grid {
-  @include grid;
-}
-
-.heading {
-  @include heading;
-}
-
-.content {
-  grid-area: content;
-  width: 100%;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-  width: 100%;
-}
-
-.text-container {
-  @include text-input-container;
-}
-
-.bottom-bar {
-  display: flex;
-  grid-area: foot;
-  margin-top: auto;
-  padding-bottom: 20px;
-  font-size: $f2;
-}
-
 .reminder-text {
   color: $red;
 }

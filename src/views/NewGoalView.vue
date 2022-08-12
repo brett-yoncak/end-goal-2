@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useUserStore } from '@/store/userStore.js'
 import CleanButton from '@/components/CleanButton.vue'
+import TextWrapper from '@/components/TextWrapper.vue'
 import getDate from '@/helper.js'
 
 const userStore = useUserStore()
@@ -14,7 +15,7 @@ let dayName = ref(getDate)
 </script>
 
 <template>
-  <div class="grid">
+  <div class="card">
     <span class="top-bar">
       Happy {{ dayName }}, {{ name }}!
     </span>
@@ -24,13 +25,12 @@ let dayName = ref(getDate)
     </header>
 
     <main class="content">
-      <form class="form">  
-        <input
+      <form class="form">
+        <TextWrapper
           v-model="currentEndGoal"
-          class="text-container"
           placeholder="I will..."
           type="text"
-        >
+        />
     
         <CleanButton
           background="green"
@@ -46,45 +46,13 @@ let dayName = ref(getDate)
       </span>
          
       <span class="normal-text">
-        Goals should be generalized and long-term. Keep it broad and lofty.
+        Goals should be generalized and long-term. Keep it broad.
       </span>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.grid {
-   @include grid;
-}
-
-.heading {
-   @include heading
-}
-
-.content {
-   grid-area: content;
-   width: 100%;
-}
-
-.form {
-   display: flex;
-   flex-direction: column;
-   row-gap: 8px;
-   width: 100%;
-}
-
-.text-container {
-   @include text-input-container;
-}
-
-.bottom-bar {
-   display: flex;
-   grid-area: foot;
-   margin-top: auto;
-   padding-bottom: 20px;
-   font-size: $f2;
-}
-
 .reminder-text {
    color: $red;
 }
@@ -94,8 +62,8 @@ let dayName = ref(getDate)
 }
 
 .top-bar {
-   grid-area: top;
    color: white;
    font-size: $f2;
+  padding-left: 16px;
 }
 </style>

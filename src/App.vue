@@ -1,8 +1,8 @@
 <script setup>
 import { RouterView } from 'vue-router';
 import { getAuth, signOut } from 'firebase/auth'
-import { useUserStore } from '@/store/userStore.js'
 import router from '@/router'
+import { useUserStore } from '@/store/userStore.js'
 import { EventBus } from './event-bus';
 import AppNotification from '@/components/AppNotification.vue';
 

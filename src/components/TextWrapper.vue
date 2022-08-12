@@ -13,7 +13,7 @@ const emits = ['update:modelValue']
 
 <template>
   <input
-    class="text-container"
+    class="text-input-container"
     v-bind="$attrs"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
@@ -21,7 +21,4 @@ const emits = ['update:modelValue']
 </template>
 
 <style lang="scss" scoped>
-.text-container {
-   @include text-input-container;
-}
 </style>

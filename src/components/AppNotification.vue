@@ -67,13 +67,14 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.noti{
+.noti {
   display: flex;
   flex-direction: column;
   background-color: #1F1F1F;
   padding: 12px;
   border-radius: 8px;
   width: 50%;
+  box-shadow: -2px 8px 24px;
 }
 
 .top-bar {
@@ -88,6 +89,7 @@ onMounted(() => {
   border-radius: 4px;
   background-color: $red;
 }
+
 .icon{
   width: 20px;
   fill: white;

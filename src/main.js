@@ -18,7 +18,7 @@ const firebaseConfig = {
   measurementId: process.env.VUE_APP_FB_MEASUREMENT_ID
 }
 
-//initializing firebase 
+//initializing firebase
 initializeApp(firebaseConfig)
 
 const FirestorePlugin = {

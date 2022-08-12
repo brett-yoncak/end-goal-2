@@ -69,7 +69,7 @@ const login = () => {
 </script>
 
 <template>
-  <div class="grid">
+  <div class="card">
     <header class="heading">
       <span>🏆 Log in to start acheiving your goals! 🏆</span>
     </header>
@@ -113,35 +113,6 @@ const login = () => {
 </template>
 
 <style lang="scss" scoped>
-.grid {
-  @include grid;
-}
-
-.heading {
-  @include heading
-}
-
-.content {
-  grid-area: content;
-  width: 100%;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-   
-  width: 100%;
-}
-
-.bottom-bar {
-  display: flex;
-  grid-area: foot;
-  margin-top: auto;
-  padding-bottom: 20px;
-  font-size: $f2
-}
-
 .reminder-text {
   color: $red;
 }
