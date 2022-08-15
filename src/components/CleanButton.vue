@@ -15,17 +15,16 @@ const props = defineProps (
 
 <template>
   <button :class="['clean-button', background]">
-    {{ text }}
+    <h2>{{ text }}</h2>
   </button>
 </template>
 
 <style lang="scss" scoped>
 .clean-button {
-  padding: 30px;   
+  padding: 1.6rem;   
   width: 100%;
   border: none;
   border-radius: 80px;
-  font-size: 20px
 }
 
 .green {

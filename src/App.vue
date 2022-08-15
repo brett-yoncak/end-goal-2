@@ -36,7 +36,9 @@ const logout = () => {
 <template>
   <AppNotification class="noti" />
   <button @click="logout">
-    LOGOUT
+    <p>
+      LOGOUT
+    </p>
   </button>
 
   <RouterView />

@@ -16,12 +16,12 @@ let dayName = ref(getDate)
 
 <template>
   <div class="card">
-    <span class="top-bar">
+    <p class="top-bar">
       Happy {{ dayName }}, {{ name }}!
-    </span>
+    </p>
 
     <header class="heading">
-      <span>What is your End Goal?</span>
+      <h1>What is your End Goal?</h1>
     </header>
 
     <main class="content">
@@ -41,13 +41,13 @@ let dayName = ref(getDate)
     </main>
 
     <div class="bottom-bar">
-      <span class="reminder-text">
+      <p class="reminder-text">
         Reminder: &nbsp; 
-      </span>
+      </p>
          
-      <span class="normal-text">
-        Goals should be generalized and long-term. Keep it broad.
-      </span>
+      <p class="normal-text">
+        Goals should be generalized and long-term.
+      </p>
     </div>
   </div>
 </template>
@@ -63,7 +63,6 @@ let dayName = ref(getDate)
 
 .top-bar {
    color: white;
-   font-size: $f2;
   padding-left: 16px;
 }
 </style>

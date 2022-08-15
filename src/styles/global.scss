@@ -1,8 +1,8 @@
 .text-input-container {
     color: white;
     border: none;
-    padding: 30px 0 30px 40px ;
-    font-size: 23px;
+    padding: 1.6rem 0 1.6rem 2.4rem ;
+    font-size: var(--fs-norm);
     background: #565656;
     border-radius: 80px;
     width: 100%;
@@ -11,21 +11,18 @@
 
 .card {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50vh;
+    left: 50vw;
     transform: translate(-50%, -50%);
     background: #404040;
     border-radius: 24px;
-    padding:24px;
-    max-height: 720px;
-    width: 640px;
-    grid-template-rows: 24px 64px 448px auto;
+    min-width: 420px;
+    width: 48vw;
     padding: 40px;
     box-sizing: border-box;
 }
 
 .heading {
-    font-size: 23px;
     font-weight: bold;
     color: white;
     letter-spacing: 1px;
@@ -38,9 +35,7 @@
 }
 
 .bottom-bar {
-    display: flex;
     padding: 16px 16px 0 16px;
-    font-size: 16px;
 }
 
 .form {
@@ -50,14 +45,14 @@
     width: 100%;
  }
 
+.router {
+    display: flex;
+    text-decoration: none;
+}
+
 //COLORS
 $green: #3AE04B;
 
 $red: #F3451E;
 
 $grey: #565656;
-
-
-//TYPOGRAPHY
-$f1: 23px;
-$f2: 16px;

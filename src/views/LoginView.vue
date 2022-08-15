@@ -13,7 +13,6 @@ const userStore = useUserStore()
 let email = ref('')
 let password = ref('')
 
-let alert = userStore.alert
 let alertType = ref('')
 let alertHeader = ref('')
 let alertMessage = ref('')
@@ -71,7 +70,7 @@ const login = () => {
 <template>
   <div class="card">
     <header class="heading">
-      <span>🏆 Log in to start acheiving your goals! 🏆</span>
+      <h1>Log in to start acheiving your goals! 🏆</h1>
     </header>
 
     <main class="content">
@@ -96,17 +95,14 @@ const login = () => {
     </main>
 
     <div class="bottom-bar">
-      <router-link
-        to="/register"
-        style="text-decoration: none"
-      >
-        <span class="reminder-text">
-          Don't have an account? &nbsp; 
-        </span>
-         
-        <span class="normal-text">
+      <router-link to="/register" class="router">
+        <p class="reminder-text">
+          Don't have an account? &nbsp;
+        </p>
+
+        <p class="normal-text">
           Click here to sign up.
-        </span>
+        </p>
       </router-link>
     </div>
   </div>

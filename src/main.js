@@ -3,6 +3,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import storeReset from "@/storeReset.js"
 import router from './router'
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
@@ -31,6 +32,7 @@ const FirestorePlugin = {
 const pinia = createPinia()
 
 pinia.use(piniaPluginPersistedstate)
+pinia.use(storeReset)
 
 const app = createApp(App)
 

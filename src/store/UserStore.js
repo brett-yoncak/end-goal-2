@@ -1,16 +1,6 @@
 import { defineStore } from 'pinia'
 import { EventBus } from '@/event-bus'
 
-const defaultState = {
-  loggedIn: false,
-  name: '',
-  currentEndGoal: '',
-  endGoals: [],
-  tasks: [],
-  archives: [],
-  alert: false
-}
-
 export const useUserStore = defineStore('userStore', {
   state() {
     return {
@@ -20,14 +10,13 @@ export const useUserStore = defineStore('userStore', {
       endGoals: [],
       tasks: [],
       archives: [],
-      alert: false
     }
   },
 
   getters: {},
 
   actions: {
-    login(userId) {
+    login() {
       if(!this.loggedIn){
         EventBus.emit('notify', {
           type: 'success',
@@ -45,7 +34,7 @@ export const useUserStore = defineStore('userStore', {
           header: 'Goodbye!',
           message: 'Have a nice day.',
         })
-        this.reset()
+        this.$reset()
       } else {
         EventBus.emit('notify', {
           type: 'error',
@@ -53,10 +42,6 @@ export const useUserStore = defineStore('userStore', {
           message: 'Login to get started!',
         })
       }  
-    },
-
-    reset() {
-      Object.assign(this, defaultState)
     },
 
     setName(name) {

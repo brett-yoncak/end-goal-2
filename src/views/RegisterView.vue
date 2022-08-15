@@ -67,7 +67,7 @@ const register = () => {
 <template>
   <div class="card">
     <header class="heading">
-      <span>Create your account to get started! 💪</span>
+      <h1>Create your account to get started! 💪</h1>
     </header>
 
     <article class="content">
@@ -104,13 +104,13 @@ const register = () => {
 
     <div class="bottom-bar">
       <router-link class="router" to="/login">
-        <span class="reminder-text">
-          Already have an account? &nbsp; 
-        </span>
+        <p class="reminder-text">
+          Already have an account? &nbsp;
+        </p>
          
-        <span class="normal-text">
+        <p class="normal-text">
           Click here to login.
-        </span>
+        </p>
       </router-link>
     </div>
   </div>
