@@ -1,6 +1,5 @@
 <script setup>
-const props = defineProps (
-  {
+const props = defineProps({
     text: {
       type: String,
       required: true
@@ -15,7 +14,7 @@ const props = defineProps (
 
 <template>
   <button :class="['clean-button', background]">
-    <h2>{{ text }}</h2>
+    {{ text }}
   </button>
 </template>
 
@@ -25,6 +24,8 @@ const props = defineProps (
   width: 100%;
   border: none;
   border-radius: 80px;
+  font-size: var(--fs-norm);
+  letter-spacing: 1px;
 }
 
 .green {

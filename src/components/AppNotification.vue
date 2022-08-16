@@ -1,66 +1,61 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onUpdated, computed } from 'vue'
 import CloseButton from '@/icons/CloseButton.vue'
-import { EventBus } from '@/event-bus.js'
+import { useNotiesStore } from '@/store/notiesStore'
 
-let hidden = ref(true)
+const noti = useNotiesStore()
+
+let hidden = computed(() => {
+  return noti.hidden
+})
+
+let notification = computed(() => {
+  return noti.notification
+})
 
 let type = ref('')
 let header = ref('')
 let message = ref('')
 
-const bindEvents = () => {
-  EventBus.on('notify', function( data ){
-    handleNotification( data )
-  }
-  .bind(this))
-}
-
-const handleNotification = ( data ) => {
-  type.value = data.type
-  header.value = data.header
-  message.value = data.message
-  hidden.value = false
-
-  setTimeout( function(){
-    clearNotification()
-  }.bind(this), 3500 )
+let handleNotification = () => {
+  type.value = notification.value.type
+  header.value = notification.value.header
+  message.value = notification.value.message
+  setTimeout(clearNotification, 3500 )
 }
 
 const close = () => {
+  noti.turnOffNotification()
   clearNotification()
 }
 
 const clearNotification = () => {
-  hidden.value = true;
-
-	setTimeout( function(){
-    type.value = '';
-    header.value = '';
-    message.value = '';
-  }.bind(this), 1000 );
+  noti.turnOffNotification()
+	setTimeout(() => {
+    type.value = ''
+    header.value = ''
+    message.value = ''
+    }
+    , 1000 );
 }
 
-onMounted(() => {
-  bindEvents()
+onUpdated(() => {
+  handleNotification()
 })
 </script>
 
 <template>
-  <div v-show="!hidden" :class="['noti', type]">
+  <div v-if="!hidden" :class="['noti', type]">
     <div class="top-bar">
       <div class="header">
-        {{ header }}
+        <h1>{{ header }}</h1>
       </div>
-      <i
-        class="close"
-        @click="close"
-      > 
+      <i class="close" @click="close"> 
         <CloseButton class="icon" />
       </i>
     </div>
 
-    <p class="message">
+    <p>
       {{ message }}
     </p>
   </div>
@@ -68,6 +63,11 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .noti {
+  position: fixed;
+  left: 50%; 
+  transform: translateX(-50%);
+  margin-top: 12px;
+  z-index: 100;
   display: flex;
   flex-direction: column;
   background-color: #1F1F1F;
@@ -85,14 +85,15 @@ onMounted(() => {
 .close {
   display: flex;
   justify-content: center;
-  width: 32px;
+  align-items: center;
   border-radius: 4px;
   background-color: $red;
 }
 
 .icon{
-  width: 20px;
   fill: white;
+  width: 24px;
+  padding: 2px 6px 2px 6px;
 }
 
 .error {
@@ -107,7 +108,5 @@ onMounted(() => {
 
 .header {
   align-self: center;
-  font-size: large;
-  font-weight: 800;
 }
 </style>

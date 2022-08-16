@@ -2,20 +2,17 @@
 import { ref } from 'vue'
 import router from '@/router'
 import { getAuth, signInWithEmailAndPassword} from 'firebase/auth'
+import { useNotiesStore } from '@/store/notiesStore.js'
 import { useUserStore } from '@/store/userStore.js'
-import { EventBus } from '@/event-bus.js'
 import CleanButton from '@/components/CleanButton.vue'
 import TextWrapper from '@/components/TextWrapper.vue'
 
 const auth = getAuth();
 const userStore = useUserStore()
+const noti = useNotiesStore()
 
 let email = ref('')
 let password = ref('')
-
-let alertType = ref('')
-let alertHeader = ref('')
-let alertMessage = ref('')
 
 const login = () => {
   signInWithEmailAndPassword(auth, email.value, password.value)
@@ -31,9 +28,8 @@ const login = () => {
   })
   .catch((error) => {
     const errorCode = error.code
-
     if (errorCode === 'auth/invalid-email') {
-      EventBus.emit('notify', {
+      noti.setNotification({
         type: 'error',
         header: 'Invalid Email',
         message: 'Please enter a valid email address.',
@@ -41,14 +37,14 @@ const login = () => {
       email.value = ''
       password.value = ''
     } else if (errorCode === 'auth/wrong-password') {
-      EventBus.emit('notify', {
+      noti.setNotification({
         type: 'error',
         header: 'Incorrect Password',
         message: 'Please try again.',
       })
       password.value = ''
     } else if (errorCode === 'auth/user-not-found') {
-      EventBus.emit('notify', {
+      noti.setNotification({
         type: 'error',
         header: 'User Not Found',
         message: 'Please enter a valid email address and password, or create a new account.',
@@ -56,7 +52,7 @@ const login = () => {
       email.value = ''
       password.value = ''
     } else {
-      EventBus.emit('notify', {
+      noti.setNotification({
         type: 'error',
         header: 'Something went VERY wrong.',
         message: 'Please try again.',

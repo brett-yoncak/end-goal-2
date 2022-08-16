@@ -19,6 +19,3 @@ const emits = ['update:modelValue']
     @input="$emit('update:modelValue', $event.target.value)"
   >
 </template>
-
-<style lang="scss" scoped>
-</style>

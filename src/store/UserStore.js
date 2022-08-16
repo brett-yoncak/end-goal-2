@@ -1,24 +1,21 @@
 import { defineStore } from 'pinia'
-import { EventBus } from '@/event-bus'
-import { doc, query, where } from 'firebase/firestore'
+import { useNotiesStore } from '@/store/notiesStore.js'
 
 export const useUserStore = defineStore('userStore', {
-  state() {
-    return {
+  state: () => ({   
       loggedIn: false,
       name: '',
       email: '',
       currentEndGoal: '',
       endGoals: [],
-      tasks: [],
       archives: [],
-    }
-  },
-  
+  }),
+
   actions: {
     login(user) {
+      const noti = useNotiesStore()
       if(!this.loggedIn){
-        EventBus.emit('notify', {
+        noti.setNotification({
           type: 'success',
           header: 'Welcome',
           message: 'Good luck on your tasks!',
@@ -31,16 +28,18 @@ export const useUserStore = defineStore('userStore', {
 
     logout() {
       if(this.loggedIn){
-        EventBus.emit('notify', {
+        const noti = useNotiesStore()
+        noti.setNotification({
           type: 'success',
           header: 'Goodbye!',
           message: 'Have a nice day.',
         })
         this.$reset()
       } else {
-        EventBus.emit('notify', {
+        const noti = useNotiesStore()
+        noti.setNotification({
           type: 'error',
-          header: 'You are already logged out.',
+          header: 'Already logged out.',
           message: 'Login to get started!',
         })
       }  
@@ -48,6 +47,16 @@ export const useUserStore = defineStore('userStore', {
 
     setName(name) {
       this.name = name
+    },
+
+    setNewEndGoal(endGoal, firstTask) {
+      this.currentEndGoal = endGoal
+      const goal = {
+        title: endGoal,
+        tasks: [firstTask],
+        user: this.email
+      }
+      this.endGoals.push(goal)
     }
   },
 

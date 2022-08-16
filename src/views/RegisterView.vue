@@ -1,15 +1,16 @@
 <script setup>
 import { ref } from 'vue'
 import router from '@/router'
-import { EventBus } from '@/event-bus.js'
 import { getAuth, updateProfile, createUserWithEmailAndPassword } from 'firebase/auth'
 import { useUserStore } from '@/store/userStore.js'
+import { useNotiesStore } from '@/store/notiesStore.js'
 import CleanButton from '@/components/CleanButton.vue'
 import TextWrapper from '@/components/TextWrapper.vue'
 
 
 const auth = getAuth();
 const userStore = useUserStore()
+const noti = useNotiesStore()
 const user = auth.currentUser
 
 let name = ref('')
@@ -19,7 +20,7 @@ let passwordCheck = ref('')
 
 const register = () => {
   if (password.value != passwordCheck.value){
-    EventBus.emit('notify', {
+    noti.setNotification({
       type: 'error',
       header: 'Passwords Must Match',
       message: 'Passwords did not match. Please try again.',
@@ -37,31 +38,28 @@ const register = () => {
     updateProfile(auth.currentUser, {
       displayName: name.value
     })
-    .then(() => {
-      console.log(user.displayName)
-    })
+    .then(() => {})
     .catch(() => {
-      EventBus.emit('notify', {
+      noti.setNotification({
         type: 'error',
         header: 'Something Went Wrong...',
         message: 'An error occurred.'
       })
     })
-
+    
     router.replace({name: 'new'})
-    console.log(user.displayName)  
    })
   .catch((error) => {
     const errorCode = error.code
     
     if (errorCode === 'auth/invalid-email'){
-      EventBus.emit('notify', {
+      noti.setNotification({
         type: 'error',
         header: 'Invalid Email',
         message: 'Please enter a valid email address.',
       })
     } else if (errorCode === 'auth/weak-password'){
-      EventBus.emit('notify', {
+      noti.setNotification({
         type: 'error',
         header: 'Weak Password',
         message: 'Your password should be at least 6 characters long.',
