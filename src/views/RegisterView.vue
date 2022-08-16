@@ -29,12 +29,23 @@ const register = () => {
   }
 
   createUserWithEmailAndPassword(auth, email.value, password.value)
-  .then(() => {
-    userStore.login()
+  .then((userCredential) => {
+    const user = userCredential.user
+    userStore.login(user)
     userStore.setName(name.value)
     
-    updateProfile(user, {
-      displayName:name.value
+    updateProfile(auth.currentUser, {
+      displayName: name.value
+    })
+    .then(() => {
+      console.log(user.displayName)
+    })
+    .catch(() => {
+      EventBus.emit('notify', {
+        type: 'error',
+        header: 'Something Went Wrong...',
+        message: 'An error occurred.'
+      })
     })
 
     router.replace({name: 'new'})

@@ -7,6 +7,7 @@ import storeReset from "@/storeReset.js"
 import router from './router'
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
+import { PiniaFirestoreSync } from 'pinia-plugin-firestore-sync'
 import '@/styles/main.scss'
 
 const firebaseConfig = {
@@ -22,19 +23,19 @@ const firebaseConfig = {
 //initializing firebase
 initializeApp(firebaseConfig)
 
+const pinia = createPinia().use(PiniaFirestoreSync)
+
+pinia.use(piniaPluginPersistedstate)
+pinia.use(storeReset)
+
+const app = createApp(App)
+
 const FirestorePlugin = {
   install: (app, options) => {
     const db = getFirestore()
     app.provide('database', db) 
   }
 };
-
-const pinia = createPinia()
-
-pinia.use(piniaPluginPersistedstate)
-pinia.use(storeReset)
-
-const app = createApp(App)
 
 app.use(pinia)
 

@@ -1,22 +1,22 @@
 import { defineStore } from 'pinia'
 import { EventBus } from '@/event-bus'
+import { doc, query, where } from 'firebase/firestore'
 
 export const useUserStore = defineStore('userStore', {
   state() {
     return {
       loggedIn: false,
       name: '',
+      email: '',
       currentEndGoal: '',
       endGoals: [],
       tasks: [],
       archives: [],
     }
   },
-
-  getters: {},
-
+  
   actions: {
-    login() {
+    login(user) {
       if(!this.loggedIn){
         EventBus.emit('notify', {
           type: 'success',
@@ -24,6 +24,8 @@ export const useUserStore = defineStore('userStore', {
           message: 'Good luck on your tasks!',
         })
       this.loggedIn = true
+      this.name = user.displayName
+      this.email = user.email
       } else alert('You are already logged in.')  
     },
 

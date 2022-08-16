@@ -18,11 +18,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
 //TYPOGRAPHY
 :root {
-  --fs-norm: clamp(0.8rem, 1.5vw, 2rem);
-  --fs-small: clamp(.75rem, 1.5vw, .9rem);
+  --fs-norm: clamp(0.8rem, 1.8vw, 1.8rem);
+  --fs-small: clamp(.75rem, 1.6vw, 1rem);
 }
 
 *,

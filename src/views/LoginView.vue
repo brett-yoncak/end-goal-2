@@ -19,8 +19,9 @@ let alertMessage = ref('')
 
 const login = () => {
   signInWithEmailAndPassword(auth, email.value, password.value)
-  .then(() => {
-    userStore.login()
+  .then((userCredential) => {
+    const user = userCredential.user
+    userStore.login(user)
     
     if (userStore.endGoals.length > 0) {
       router.replace({name: 'tasks'})
