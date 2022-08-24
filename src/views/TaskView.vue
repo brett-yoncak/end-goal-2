@@ -1,9 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import router from '@/router'
-import { doc, setDoc } from 'firebase/firestore'
-import db from '@/main.js'
 import { useUserStore } from '@/store/userStore.js'
 import { useNotiesStore } from '@/store/notiesStore.js'
 import CleanButton from '@/components/CleanButton.vue'

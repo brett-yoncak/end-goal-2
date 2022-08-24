@@ -1,9 +1,9 @@
 <script setup>
 import { RouterView } from 'vue-router';
 import { getAuth, signOut } from 'firebase/auth'
-import router from '@/router'
 import { useNotiesStore } from './store/notiesStore';
 import { useUserStore } from '@/store/userStore.js'
+import router from '@/router'
 import AppNotification from '@/components/AppNotification.vue';
 
 const auth = getAuth()
