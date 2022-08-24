@@ -1,0 +1,54 @@
+html {
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  overflow: scroll;
+}
+
+body {
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  background-color: #1F1F1F;
+  overflow: scroll;
+}
+
+#app {
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+//TYPOGRAPHY
+:root {
+  --fs-norm: clamp(0.8rem, 2vw, 1.4rem);
+  --fs-small: clamp(.75rem, 1.6vw, 1rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+h1,
+h2,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: var(--fs-norm);
+  letter-spacing: 1.25px;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: var(--fs-norm);
+  letter-spacing: 1px;
+}
+
+p {
+  font-size: var(--fs-small);
+}
