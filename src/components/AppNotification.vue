@@ -1,42 +1,35 @@
 <script setup>
 import { ref, onUpdated, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import CloseButton from '@/icons/CloseButton.vue'
 import { useNotiesStore } from '@/store/notiesStore'
 
 const noti = useNotiesStore()
 
-let hidden = computed(() => {
-  return noti.hidden
-})
+let { hidden, type, header, message } = storeToRefs(noti)
 
-let notification = computed(() => {
-  return noti.notification
-})
-
-let type = ref('')
-let header = ref('')
-let message = ref('')
+let notiType = type
+let notiHeader = header
+let notiMessage = message
 
 let handleNotification = () => {
-  type.value = notification.value.type
-  header.value = notification.value.header
-  message.value = notification.value.message
   setTimeout(clearNotification, 3500 )
 }
 
 const close = () => {
   noti.turnOffNotification()
+  
   clearNotification()
 }
 
 const clearNotification = () => {
   noti.turnOffNotification()
-	setTimeout(() => {
-    type.value = ''
-    header.value = ''
-    message.value = ''
-    }
-    , 1000 );
+	
+  setTimeout(() => {
+    notiType = ''
+    notiHeader = ''
+    notiMessage = ''
+  }, 1000 );
 }
 
 onUpdated(() => {
@@ -46,12 +39,12 @@ onUpdated(() => {
 
 <template>
   <div v-if="!hidden" :class="['noti', type]">
-    <div class="top-bar">
+    <div class="close-bar">
       <div class="header">
         <h1>{{ header }}</h1>
       </div>
-      <i class="close" @click="close"> 
-        <CloseButton class="icon" />
+      <i class="close-icon" @click="close"> 
+        <CloseButton class="x-icon" />
       </i>
     </div>
 
@@ -77,12 +70,12 @@ onUpdated(() => {
   box-shadow: -2px 8px 24px;
 }
 
-.top-bar {
+.close-bar {
   display: flex;
   justify-content: space-between;
 }
 
-.close {
+.close-icon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,7 +83,7 @@ onUpdated(() => {
   background-color: $red;
 }
 
-.icon{
+.x-icon{
   fill: white;
   width: 24px;
   padding: 2px 6px 2px 6px;

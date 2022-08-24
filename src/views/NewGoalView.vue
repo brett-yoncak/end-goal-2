@@ -1,33 +1,35 @@
 <script setup>
 import { ref } from 'vue'
 import router from '@/router'
+import { storeToRefs } from 'pinia'
 import { useNotiesStore } from '@/store/notiesStore.js'
 import { useUserStore } from '@/store/userStore.js'
 import CleanButton from '@/components/CleanButton.vue'
 import TextWrapper from '@/components/TextWrapper.vue'
 import getDate from '@/helper.js'
 
-const userStore = useUserStore()
 const noti = useNotiesStore()
+const userStore = useUserStore()
 
-let currentEndGoal = ref('')
 let firstTask = ref( 
   {
+    id: `${Date() + userStore.userID}`,
     title: '',
-    priority: 3
+    priority: 1
   }
 )
 
-
 let enteredGoal = ref(false)
+let goal = ref('')
 
 //top-bar message
-let name = ref(userStore.name)
+let { name } = storeToRefs(userStore)
 let dayName = ref(getDate())
+//
 
 const setEndGoal = () => {
-  if(currentEndGoal.value){
-    userStore.setNewEndGoal(currentEndGoal.value, firstTask.value)
+  if(goal.value){
+    userStore.addNewEndGoal(goal.value, firstTask.value)
     router.replace({name: 'tasks'}) 
   } else {
     noti.setNotification({
@@ -38,7 +40,7 @@ const setEndGoal = () => {
   }
 }
 
-const addTask = () => {
+const submitGoal = () => {
   enteredGoal.value = true
 }
 </script>
@@ -53,10 +55,10 @@ const addTask = () => {
     </p>
 
     <header class="heading">
-      <h1 v-show="!enteredGoal">
+      <h1 v-if="!enteredGoal">
         What is your End Goal?
       </h1>
-      <h1 v-show="enteredGoal">
+      <h1 v-if="enteredGoal">
         Now, let's create your first task: 
       </h1>
     </header>
@@ -65,10 +67,10 @@ const addTask = () => {
       <form 
         v-show="!enteredGoal"
         class="form" 
-        @submit.prevent="addTask"
+        @submit.prevent="submitGoal"
       >
         <TextWrapper
-          v-model="currentEndGoal"
+          v-model="goal"
           placeholder="I will..."
           type="text"
         />
@@ -118,10 +120,5 @@ const addTask = () => {
 
 .normal-text {
    color: white;
-}
-
-.top-bar {
-   color: white;
-  padding-left: 16px;
 }
 </style>

@@ -1,13 +1,12 @@
 /* eslint-disable */
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-import storeReset from "@/storeReset.js"
-import router from './router'
-import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
-import { PiniaFirestoreSync } from 'pinia-plugin-firestore-sync'
+import { initializeApp} from 'firebase/app'
+import storeReset from "@/storeReset.js"
 import '@/styles/main.scss'
 
 const firebaseConfig = {
@@ -23,24 +22,23 @@ const firebaseConfig = {
 //initializing firebase
 initializeApp(firebaseConfig)
 
-const pinia = createPinia().use(PiniaFirestoreSync)
+//setting firestore
+const db = getFirestore()
+
+const pinia = createPinia()
 
 pinia.use(piniaPluginPersistedstate)
+
 pinia.use(storeReset)
 
 const app = createApp(App)
 
-const FirestorePlugin = {
-  install: (app, options) => {
-    const db = getFirestore()
-    app.provide('database', db) 
-  }
-};
+app.provide('db', db)
 
-app.use(pinia)
+pinia.use(() => ({db}))
 
 app.use(router)
 
-app.use(FirestorePlugin)
+app.use(pinia)
 
 app.mount('#app')

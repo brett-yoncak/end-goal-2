@@ -20,7 +20,7 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .clean-button {
-  padding: 1.6rem;   
+  padding: 1rem;   
   width: 100%;
   border: none;
   border-radius: 80px;

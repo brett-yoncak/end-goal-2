@@ -1,22 +1,32 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
+import { storeToRefs } from 'pinia'
 import router from '@/router'
 import { getAuth, updateProfile, createUserWithEmailAndPassword } from 'firebase/auth'
+import { doc, setDoc } from 'firebase/firestore'
 import { useUserStore } from '@/store/userStore.js'
 import { useNotiesStore } from '@/store/notiesStore.js'
 import CleanButton from '@/components/CleanButton.vue'
 import TextWrapper from '@/components/TextWrapper.vue'
 
-
-const auth = getAuth();
+const db = inject('db')
+const auth = getAuth()
 const userStore = useUserStore()
 const noti = useNotiesStore()
-const user = auth.currentUser
 
-let name = ref('')
-let email = ref('')
+let { name, email } = storeToRefs(userStore)
 let password = ref('')
 let passwordCheck = ref('')
+
+//creates a user document in users collection on firestore
+const createUser = async (userID) => {
+  await setDoc(doc(db, 'users', userID), { 
+    uid: userID, 
+    displayName: userStore.name, 
+    email: userStore.email,
+    currentEndGoalID: '' 
+  })
+}
 
 const register = () => {
   if (password.value != passwordCheck.value){
@@ -29,48 +39,45 @@ const register = () => {
     passwordCheck.value  = ''
   }
 
-  createUserWithEmailAndPassword(auth, email.value, password.value)
-  .then((userCredential) => {
-    const user = userCredential.user
-    userStore.login(user)
-    userStore.setName(name.value)
-    
-    updateProfile(auth.currentUser, {
-      displayName: name.value
-    })
-    .then(() => {})
-    .catch(() => {
-      noti.setNotification({
-        type: 'error',
-        header: 'Something Went Wrong...',
-        message: 'An error occurred.'
-      })
-    })
-    
-    router.replace({name: 'new'})
-   })
-  .catch((error) => {
-    const errorCode = error.code
-    
-    if (errorCode === 'auth/invalid-email'){
-      noti.setNotification({
-        type: 'error',
-        header: 'Invalid Email',
-        message: 'Please enter a valid email address.',
-      })
-    } else if (errorCode === 'auth/weak-password'){
-      noti.setNotification({
-        type: 'error',
-        header: 'Weak Password',
-        message: 'Your password should be at least 6 characters long.',
-      })
-    }
+  createUserWithEmailAndPassword(auth, userStore.email, password.value)
+    .then((userCredential) => {
+      const user = userCredential.user
+      
+      createUser(user.uid)
 
-    email.value = ''
-    password.value = ''
-    passwordCheck.value = ''
-  })
-}
+      userStore.login(auth, password.value)
+    
+      updateProfile(auth.currentUser, { displayName: userStore.name })
+        .then(() => {})
+        .catch(() => {
+          noti.setNotification({
+            type: 'error',
+            header: 'Something Went Wrong...',
+            message: 'An error occurred.'
+          })
+        })
+    .catch((error) => {
+      const errorCode = error.code
+    
+      if (errorCode === 'auth/invalid-email'){
+        noti.setNotification({
+          type: 'error',
+          header: 'Invalid Email',
+          message: 'Please enter a valid email address.',
+        })
+      } else if (errorCode === 'auth/weak-password'){
+        noti.setNotification({
+          type: 'error',
+          header: 'Weak Password',
+          message: 'Your password should be at least 6 characters long.',
+        })
+      }
+    })
+  email = ''
+  name = ''
+  password.value = ''
+  passwordCheck.value = ''
+})}
 </script>
 
 <template>

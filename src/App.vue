@@ -13,17 +13,18 @@ const userStore = useUserStore()
 // Will properly integrate in Options Page PR.
 const logout = () => {
   if(userStore.loggedIn) {
-    signOut(auth).then(() => {
-      userStore.logout()
-      router.replace({name: 'login'})
-    })
-    .catch(() => {
-      noti.setNotification({
-        type: 'error',
-        header: 'Something went wrong.',
-        message: 'Oops... please try again.',
+    signOut(auth)
+      .then(() => {
+        userStore.logout()
+        router.replace({name: 'login'})
       })
-    })
+      .catch(() => {
+        noti.setNotification({
+          type: 'error',
+          header: 'Something went wrong.',
+          message: 'Oops... please try again.',
+        })
+      })
   } else {
     noti.setNotification({
       type: 'error',
