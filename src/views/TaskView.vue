@@ -1,13 +1,16 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, inject } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/store/userStore.js'
 import { useNotiesStore } from '@/store/notiesStore.js'
+import { getAuth } from 'firebase/auth'
 import CleanButton from '@/components/CleanButton.vue'
 import OptionsIcon from '@/icons/OptionsIcon.vue'
 import TaskItem from '@/components/TaskItem.vue'
 import TextWrapper from '@/components/TextWrapper.vue'
+import { uploadBytes, ref } from '@firebase/storage'
 
+const storage = inject('storage')
 const userStore = useUserStore()
 const noti = useNotiesStore()
 
@@ -22,14 +25,47 @@ onMounted(() => {
 // let addTask = (title, priority) => {
 //   userStore.addTask(title, priority)
 // }
+
+let file = {}
+let fileName = ''
+
+const uploadTask = () => {
+  const imageRef = ref(storage, `/images/${fileName}`)
+  
+  console.log(imageRef)
+
+  uploadBytes(imageRef, file)
+    .then((snapshot) => {
+      console.log('Uploaded!')
+      file = {}
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const previewFiles = (e) => {
+  file = e.target.files;
+  fileName = file[0].name
+  console.log(fileName)
+}
+
+// const uploadPicture = () => {
+//   firebase.storage
+// }
 </script>
 
 <template>
   <div class="card">
     <div class="top-bar options">
-      <i class="router">
-        <OptionsIcon />
-      </i>
+      <input
+        class="router"
+        type="file"
+        @change="previewFiles"
+      >
+      <button @click="uploadTask">
+        Upload Picture
+      </button>
     </div>
 
     <header class="heading">
