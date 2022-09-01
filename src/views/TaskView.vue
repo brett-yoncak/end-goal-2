@@ -16,11 +16,6 @@ const noti = useNotiesStore()
 
 let { currentEndGoal, tasks } = storeToRefs(userStore)
 
-onMounted(() => {
-  userStore.tasks = []
-  userStore.getEndGoalsAndTasks()
-})
-
 //SAVING FOR LATER
 // let addTask = (title, priority) => {
 //   userStore.addTask(title, priority)
