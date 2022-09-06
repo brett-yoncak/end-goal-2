@@ -6,7 +6,7 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from "firebase/storage"
-import { initializeApp} from 'firebase/app'
+import { initializeApp } from 'firebase/app'
 import storeReset from "@/storeReset.js"
 import '@/styles/main.scss'
 
@@ -38,12 +38,12 @@ pinia.use(storeReset)
 //App
 const app = createApp(App)
 
-//allows inject firestore & storage into any component
+//allows inject firestore (db) & storage into any component
 app.provide('db', db)
 app.provide('storage', storage)
 
 //allows this.db use in any store
-pinia.use(() => ({db}))
+pinia.use(() => ({ db }))
 
 app.use(router)
 
