@@ -5,10 +5,21 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import NewGoalView from '../views/NewGoalView.vue'
 import TaskView from '../views/TaskView.vue'
+import OptionsView from '../views/OptionsView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    {
+      path: '/options',
+      name: 'options',
+      component: OptionsView,
+      meta: {
+        requiresAuth: true
+      }
+    },
+
     {
       path: '/tasks',
       name: 'tasks',
@@ -22,7 +33,7 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
-      meta: { 
+      meta: {
         requiresGuest: true
       }
     },
@@ -31,7 +42,7 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: RegisterView,
-      meta: { 
+      meta: {
         requiresGuest: true
       }
     },

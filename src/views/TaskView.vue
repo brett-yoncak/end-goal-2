@@ -53,14 +53,7 @@ const previewFiles = (e) => {
 <template>
   <div class="card">
     <div class="top-bar options">
-      <input
-        class="router"
-        type="file"
-        @change="previewFiles"
-      >
-      <button @click="uploadTask">
-        Upload Picture
-      </button>
+      <span>...</span>
     </div>
 
     <header class="heading">
